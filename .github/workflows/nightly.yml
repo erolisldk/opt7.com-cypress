@@ -20,7 +20,7 @@ jobs:
           node-version: '14'
 
       - name: Run Cypress tests
-        run: npm run cypress:run
+        run: npm run test
 
       - name: Notify test results to Slack
         env:
