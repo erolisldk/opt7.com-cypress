@@ -25,7 +25,7 @@
     "Cucumber",
     "Gherkin"
   ],
-  "author": "Levi9",
+  "author": "Erol",
   "license": "ISC",
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^20.1.0",

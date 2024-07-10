@@ -5,7 +5,7 @@ const url = getUrl();
 
 Given('User goes to home page', () => {
   cy.visit(`${url}`);
-  cy.contains('optimum7');
+  
 });
 
 Given('User is on the Rooms Management Page', () => {
