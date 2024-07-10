@@ -1,170 +1,19 @@
-name: Run All E2E Tests
+name: Cypress Tests
 
-on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to run Tests'
-        required: true
-        default: 'local'
-        type: choice
-        options:
-          - local
-          - prod
-      browser:
-        description: 'Browser in which to run Tests'
-        required: true
-        default: 'electron'
-        type: choice
-        options:
-          - electron
-          - chrome
-          - firefox
-          - edge
-      skip-bugs:
-        description: 'Skip Test with Known Bugs'
-        required: true
-        default: true
-        type: boolean
+on: [push]
 
+env:
+  SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
 jobs:
-  test-local:
-    if: ${{ inputs.environment == 'local' }}
-    name: Tests on local - ${{ inputs.browser }}
+  cypress-run:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    services:
-      rbp-booking:
-        image: mwinteringham/restfulbookerplatform_booking:1.6.24c7b22
-        ports:
-          - 3000:3000
-      rbp-room:
-        image: mwinteringham/restfulbookerplatform_room:1.6.24c7b22
-        ports:
-          - 3001:3001
-      rbp-branding:
-        image: mwinteringham/restfulbookerplatform_branding:1.6.24c7b22
-        ports:
-          - 3002:3002
-      rbp-assets:
-        image: mwinteringham/restfulbookerplatform_assets:1.6.24c7b22
-        ports:
-          - 3003:3003
-      rbp-auth:
-        image: mwinteringham/restfulbookerplatform_auth:1.6.24c7b22
-        ports:
-          - 3004:3004
-      rbp-report:
-        image: mwinteringham/restfulbookerplatform_report:1.6.24c7b22
-        ports:
-          - 3005:3005
-      rbp-message:
-        image: mwinteringham/restfulbookerplatform_message:1.6.24c7b22
-        ports:
-          - 3006:3006
-      rbp-proxy:
-        image: mwinteringham/restfulbookerplatform_proxy:latest
-        ports:
-          - 80:80
     steps:
-      - id: checkout-repository
-        name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - id: cypress-run
-        if: ${{ inputs.skip-bugs }}
-        name: Cypress Run
+      # Install npm dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          env: ENV=local,TAGS=not @bug
-          browser: ${{ inputs.browser }}
-          command-prefix: '--'
-      - id: cypress-run-bugs
-        if: ${{ !inputs.skip-bugs }}
-        name: Cypress Run (incl. tests with known bugs)
-        uses: cypress-io/github-action@v6
-        with:
-          env: ENV=local
-          browser: ${{ inputs.browser }}
-          command-prefix: '--'
-      - id: upload-screenshots
-        name: Upload Screenshots
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-          retention-days: 5
-      - id: upload-videos
-        name: Upload Videos
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cypress-videos
-          path: cypress/videos
-          retention-days: 5
-      - id: upload-reports
-        name: Upload Reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cypress-reports
-          path: cypress/reports
-          retention-days: 5
-
-  test-prod:
-    if: ${{ inputs.environment == 'prod' }}
-    name: Tests on prod - ${{ inputs.browser }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - id: checkout-repository
-        name: Checkout Repository
-        uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - id: cypress-run
-        if: ${{ inputs.skip-bugs }}
-        name: Cypress Run
-        uses: .0cypress-io/github-action@v6
-        with:
-          env: ENV=prod,TAGS=not @bug
-          browser: ${{ inputs.browser }}
-          command-prefix: '--'
-      - id: cypress-run-bugs
-        if: ${{ !inputs.skip-bugs }}
-        name: Cypress Run (incl. tests with known bugs)
-        uses: cypress-io/github-action@v6
-        with:
-          env: ENV=prod
-          browser: ${{ inputs.browser }}
-          command-prefix: '--'
-      - id: upload-screenshots
-        name: Upload Screenshots
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-          retention-days: 5
-      - id: upload-videos
-        name: Upload Videos
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cypress-videos
-          path: cypress/videos
-          retention-days: 5
-      - id: upload-reports
-        name: Upload Reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cypress-reports
-          path: cypress/reports
-          retention-days: 5
+          build: npm install
+          start: npm run test
