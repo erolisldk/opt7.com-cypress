@@ -1,8 +1,10 @@
 name: Nightly Cypress Tests
 
 on:
-  schedule:
-    - cron: '35 1 * * *'  # Her gece saat 00:00'da çalıştır
+ 
+    schedule:
+    - cron: '0 3 * * *'  # Her gece 1:35'te çalıştır
+    workflow_dispatch:   # Manuel başlatma için workflow_dispatch event'i ekleniyor
 
 jobs:
   cypress-run:
