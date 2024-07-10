@@ -2,7 +2,7 @@ name: Nightly Cypress Tests
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Her gece saat 00:00'da çalıştır
+    - cron: '35 1 * * *'  # Her gece saat 00:00'da çalıştır
 
 jobs:
   cypress-run:
