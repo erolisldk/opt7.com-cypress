@@ -1,11 +1,9 @@
 @HomePage
 Feature: HomePage
 
-  Background: User goes to optimum7.com
-    Given User goes to home page
-
   @sanity
   Scenario: User should be able to access home page content
+    Given User goes to home page
     When User sees to Get Your 90 days button 
     Then User should verify that Get Your 90 days button is clickable
     And User should verify that Durans photo is clickable
