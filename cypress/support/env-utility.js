@@ -1,4 +1,4 @@
-const prodUrl = 'https://automationintesting.online';
+const prodUrl = 'https://optimum7.com';
 
 const localUrl = 'http://localhost';
 const kubeLocalUrl = 'http://kube.local';

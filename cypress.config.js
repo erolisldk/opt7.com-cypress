@@ -22,7 +22,7 @@ async function setupNodeEvents(cypressOn, config) {
 }
 
 module.exports = defineConfig({
-  projectId: 'cypress-cucumber',
+  projectId: '1byenp',
   viewportWidth: 1920,
   viewportHeight: 1080,
   trashAssetsBeforeRuns: false,

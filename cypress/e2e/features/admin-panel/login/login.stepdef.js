@@ -2,10 +2,9 @@ const { When, Then } = require('@badeball/cypress-cucumber-preprocessor');
 
 const redBorder = 'border: 1px solid red';
 
-When('Tries to login with valid username and password', () => {
-  cy.fixture('users.json').then((users) => {
-    cy.loginViaUI(users.admin.username, users.admin.password);
-  });
+When('User sees to Get Your 90 days button', () => {
+ cy.get('.elementor-element-26144fe > .elementor-widget-container > .elementor-button-wrapper > .elementor-button')
+ .should('be.visible');
 });
 
 When('Tries to login with only valid password', () => {
@@ -20,22 +19,20 @@ When('Tries to login with only valid username', () => {
   });
 });
 
-When('Tries to login with wrong password', () => {
-  cy.fixture('users.json').then((users) => {
-    cy.loginViaUI(users.admin.username, 'wrong_password');
-  });
+When('User should verify that Get Your 90 days button is clickable', () => {
+ cy.get('.elementor-element-26144fe > .elementor-widget-container > .elementor-button-wrapper > .elementor-button')
+ .should('not.be.disabled')
+ .should('have.attr', 'href');
 });
 
 Then('User is Logged In', () => {
   cy.xpath('//a[text()="Logout"]').should('be.visible');
 });
 
-Then('User is redirected to Rooms Management Page', () => {
-  cy.contains('Room #');
-  cy.contains('Type');
-  cy.contains('Accessible');
-  cy.contains('Price');
-  cy.contains('Room details');
+Then('User should verify that Durans photo is clickable', () => {
+ cy.get("img[id='NjY4OjU2MQ==-1']")
+ .should('exist')     // Resmin sayfada var olduğunu doğrulayın
+ .and('be.visible'); // Resmin görünür olduğunu doğrulayın
 });
 
 Then('User is still on Booking Management login page', () => {

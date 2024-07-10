@@ -3,9 +3,9 @@ const { getUrl } = require('../../support/env-utility');
 
 const url = getUrl();
 
-Given('User is on the Booking Management Login Page', () => {
-  cy.visit(`${url}/#/admin`);
-  cy.contains('Log into your account');
+Given('User goes to home page', () => {
+  cy.visit(`${url}`);
+  cy.contains('optimum7');
 });
 
 Given('User is on the Rooms Management Page', () => {
