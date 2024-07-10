@@ -1,19 +1,30 @@
-name: Cypress Tests
+name: Nightly Cypress Tests
 
-on: [push]
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Her gece saat 00:00'da çalıştır
 
-env:
-  SLACK_WEBHOOK_URL: ${{ secrets.slack_webhook_url }}
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      # Install npm dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          build: npm install
-          start: npm run test
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Cypress tests
+        run: npm run cypress:run
+
+      - name: Notify test results to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Cypress testleri başarıyla tamamlandı!"}' $SLACK_WEBHOOK_URL
