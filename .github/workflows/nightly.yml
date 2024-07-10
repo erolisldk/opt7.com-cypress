@@ -23,7 +23,12 @@ jobs:
           start: npm run test
 
       - name: Notify test results to Slack
+        if: ${{ always() }}  # Her durumda çalıştırılsın
+        run: |
+         if [ ${{ job.status }} == 'success' ]; then
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Cypress testleri başarıyla tamamlandı!"}' $SLACK_WEBHOOK_URL
+         else
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Cypress testleri başarısız oldu!"}' $SLACK_WEBHOOK_URL
+         fi
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: |
-          curl -X POST -H 'Content-type: application/json' --data '{"text":"Cypress testleri başarıyla tamamlandı!"}' $SLACK_WEBHOOK_URL
