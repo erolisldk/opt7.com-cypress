@@ -5,5 +5,6 @@ Before(() => {
 });
 
 After(() => {
- 
+  cy.clearLocalStorage();
+  cy.clearCookies();
 });
