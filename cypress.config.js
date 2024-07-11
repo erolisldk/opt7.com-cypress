@@ -3,12 +3,18 @@ const createBundler = require('@bahmutov/cypress-esbuild-preprocessor');
 const preprocessor = require('@badeball/cypress-cucumber-preprocessor');
 const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild');
 const { cloudPlugin } = require('cypress-cloud/plugin');
+const cucumber = require('cypress-cucumber-preprocessor').default;
 
 async function setupNodeEvents(cypressOn, config) {
   const on = require('cypress-on-fix')(cypressOn);
   // This is required for the preprocessor to be able to generate JSON reports after each run, and more,
   await preprocessor.addCucumberPreprocessorPlugin(on, config);
-
+  
+  module.exports = (on, config) => {
+    on('file:preprocessor', cucumber());
+    // Diğer plugin ayarları buraya eklenebilir
+  };
+  
   on(
     'file:preprocessor',
     createBundler({
@@ -42,3 +48,4 @@ module.exports = defineConfig({
     setupNodeEvents
   }
 });
+
