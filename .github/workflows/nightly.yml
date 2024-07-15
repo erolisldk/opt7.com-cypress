@@ -26,9 +26,9 @@ jobs:
         if: ${{ always() }}  # Her durumda çalıştırılsın
         run: |
           if [ ${{ job.status }} == 'success' ]; then
-              curl -X POST -H 'Content-type: application/json' --data '{"text":"Cypress testleri başarıyla tamamlandı!"}' $SLACK_WEBHOOK_URL
+              curl -X POST -H 'Content-type: application/json' --data '{"text":"The Tests tests have passed %100! Please click on file:///C:/Users/AEN/Desktop/Gitproject/opt7.com-cypress/cypress/reports/html/cucumber-report.html for the results. "}' $SLACK_WEBHOOK_URL
           else
-              curl -X POST -H 'Content-type: application/json' --data '{"text":"Cypress testleri başarısız oldu! Detaylar için test raporunu kontrol edin."}' $SLACK_WEBHOOK_URL
+              curl -X POST -H 'Content-type: application/json' --data '{"text":"The tests have failed. Please click on file:///C:/Users/AEN/Desktop/Gitproject/opt7.com-cypress/cypress/reports/html/cucumber-report.html for the results."}' $SLACK_WEBHOOK_URL
               # Ek olarak, test raporunu Slack'e göndermek için cypress-multi-reporters gibi bir eklenti kullanabilirsiniz.
           fi
         env:

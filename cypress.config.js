@@ -1,44 +1,46 @@
-const { defineConfig } = require('cypress');
-const createBundler = require('@bahmutov/cypress-esbuild-preprocessor');
-const preprocessor = require('@badeball/cypress-cucumber-preprocessor');
-const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild');
-const { cloudPlugin } = require('cypress-cloud/plugin');
+const { defineConfig } = require("cypress")
+const createBundler = require("@bahmutov/cypress-esbuild-preprocessor")
+const preprocessor = require("@badeball/cypress-cucumber-preprocessor")
+const createEsbuildPlugin = require("@badeball/cypress-cucumber-preprocessor/esbuild")
 
-
-async function setupNodeEvents(cypressOn, config) {
-  const on = require('cypress-on-fix')(cypressOn);
-  // This is required for the preprocessor to be able to generate JSON reports after each run, and more,
-  await preprocessor.addCucumberPreprocessorPlugin(on, config);
+async function setupNodeEvents(on, config) {
+  await preprocessor.addCucumberPreprocessorPlugin(on, config)
   on(
-    'file:preprocessor',
+    "file:preprocessor",
     createBundler({
-      plugins: [createEsbuildPlugin.default(config)]
+      plugins: [createEsbuildPlugin.default(config)],
     })
-  );
-  cloudPlugin(on, config);
-  config.defaultCommandTimeout = 4000;
-  // Make sure to return the config object as it might have been modified by the plugin.
-  return config;
+  )
+  return config
 }
 
 module.exports = defineConfig({
-  projectId: '1byenp',
-  viewportWidth: 1920,
-  viewportHeight: 1080,
-  trashAssetsBeforeRuns: false,
-  screenshotsFolder: 'cypress/screenshots',
-  screenshotOnRunFailure: true,
-  video: true,
-  videoUploadOnPasses: true,
-  retries: {
-    runMode: 1,
-    openMode: 0
-  },
-  defaultCommandTimeout: 4000,
-  responseTimeout: 30000,
-  pageLoadTimeout: 60000,
+  chromeWebSecurity: false,
+  projectId: "otwa2r",
   e2e: {
-    specPattern: 'cypress/e2e/**/*.feature',
-    setupNodeEvents
-  }
-});
+    baseUrl: "http://optimum7.com",
+    defaultCommandTimeout: 5000,
+    specPattern: "./features/**/*.feature",
+    screenshotsFolder: "./cypress/results/screenshots",
+    videosFolder: "./cypress/results/videos",
+    excludeSpecPattern: "*!spec.js",
+    trashAssetsBeforeRuns: true,
+    watchForFileChanges: false,
+    supportFile: "./cypress/support/*.js",
+    viewportHeight: 1080,
+    viewportWidth: 1920,
+    video: false,
+    retries: {
+      runMode: 1,
+      openMode: 0,
+    },
+    setupNodeEvents,
+    numTestsKeptInMemory: 1,
+    experimentalMemoryManagement: true,
+  },
+  env: {
+    mockUser: "airport-v8@pointr.tech",
+    mockPwd: "P01ntr102*",
+    grantType: "password",
+  },
+})
