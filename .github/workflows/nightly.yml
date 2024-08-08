@@ -2,7 +2,7 @@ name: Nightly Cypress Tests
 
 on:
  
-    schedule:
+    //schedule:
     - cron: '0 3 * * *'  # Her gece 1:35'te çalıştır
     workflow_dispatch:   # Manuel başlatma için workflow_dispatch event'i ekleniyor
 
@@ -32,4 +32,4 @@ jobs:
               # Ek olarak, test raporunu Slack'e göndermek için cypress-multi-reporters gibi bir eklenti kullanabilirsiniz.
           fi
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          //SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
